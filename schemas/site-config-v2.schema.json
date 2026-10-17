@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Henkster72/rinjarender/main/schemas/site-config-v2.schema.json",
+  "title": "RinjaRender site_config.json v2",
+  "description": "Portable, non-secret site configuration accepted by RinjaRender.",
+  "type": "object",
+  "required": ["schema_version"],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri-reference" },
+    "schema_version": { "const": 2 },
+    "defaults": { "$ref": "#/$defs/objectWithKnownValues" },
+    "paths": {
+      "type": "object",
+      "properties": {
+        "templates": { "type": "string" },
+        "static": { "type": "string" },
+        "output": { "type": "string" },
+        "markdown_editor": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "site": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "base_url": { "type": "string", "format": "uri-reference" },
+        "language": { "type": "string" },
+        "public": { "type": "object", "additionalProperties": true }
+      },
+      "additionalProperties": true
+    },
+    "seo": { "$ref": "#/$defs/objectWithKnownValues" },
+    "markdown": { "$ref": "#/$defs/objectWithKnownValues" },
+    "tailwind": {
+      "type": "object",
+      "properties": {
+        "purge": { "type": "boolean" },
+        "prune_extra_css": { "type": "boolean" },
+        "extra_css": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "performance": { "$ref": "#/$defs/objectWithKnownValues" },
+    "security": { "$ref": "#/$defs/objectWithKnownValues" },
+    "rss": { "$ref": "#/$defs/objectWithKnownValues" },
+    "social": { "$ref": "#/$defs/objectWithKnownValues" },
+    "features": { "$ref": "#/$defs/objectWithKnownValues" },
+    "render": { "$ref": "#/$defs/objectWithKnownValues" },
+    "development": { "$ref": "#/$defs/objectWithKnownValues" },
+    "discovery": { "$ref": "#/$defs/objectWithKnownValues" },
+    "card_templates": { "type": "object", "additionalProperties": { "type": "string" } }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "objectWithKnownValues": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

@@ -239,6 +239,23 @@ documentation-only mockup. It includes a Markdown page and the small
 
 ## Quick start
 
+Create a small site and preview it locally:
+
+```bash
+rinjarender init my-site
+cd my-site
+rinjarender serve
+```
+
+`serve` performs an initial incremental render, serves the generated `output/`
+directory on `127.0.0.1:8000`, and rebuilds when source files change. It is a
+development convenience, not a production web server. Use `--host` and
+`--port` to change the listening address.
+
+The generated `site_config.json` contains a `$schema` URL for editor
+autocomplete. The formal schema is kept at
+[`schemas/site-config-v2.schema.json`](schemas/site-config-v2.schema.json).
+
 Build a site from any compatible checkout:
 
 ```bash

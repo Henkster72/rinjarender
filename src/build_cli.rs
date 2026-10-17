@@ -82,7 +82,7 @@ fn default_state_dir(site_root: &Path) -> Result<PathBuf, String> {
     Ok(cache_root.join("jnja/local").join(identity))
 }
 
-fn build_request(args: &[String]) -> Result<RenderRequest, Box<dyn std::error::Error>> {
+pub(crate) fn build_request(args: &[String]) -> Result<RenderRequest, Box<dyn std::error::Error>> {
     let (site_root, direct_cli) = site_argument(args)?;
     let site_root = site_root.canonicalize()?;
     let config_path = optional(args, "--config")
@@ -140,6 +140,12 @@ fn program_name(args: &[String]) -> &str {
 
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
+    if args.get(1).map(String::as_str) == Some("init") {
+        return crate::init_cli::run(&args[2..]);
+    }
+    if args.get(1).map(String::as_str) == Some("serve") {
+        return crate::serve_cli::run(&args[1..]);
+    }
     let name = program_name(&args);
     if args.iter().any(|arg| arg == "--help" || arg == "-h") {
         println!("{name} [SITE] [--site SITE] [--output DIR] [--state-dir DIR] [--full|--incremental] [--render-only]");

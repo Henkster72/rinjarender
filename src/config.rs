@@ -535,4 +535,26 @@ mod tests {
         assert!(load(&root, &path).is_err());
         fs::remove_dir_all(root).unwrap();
     }
+
+    #[test]
+    fn v2_accepts_editor_schema_metadata() {
+        let root = std::env::temp_dir().join(format!("jnja-config-schema-{}", std::process::id()));
+        fs::create_dir_all(&root).unwrap();
+        let path = root.join("site_config.json");
+        fs::write(
+            &path,
+            r#"{"$schema":"https://example.test/site-config.schema.json","schema_version":2}"#,
+        )
+        .unwrap();
+        let value = load(&root, &path).unwrap();
+        assert_eq!(value["schema_version"], 2);
+        assert_eq!(
+            value["$schema"],
+            "https://example.test/site-config.schema.json"
+        );
+        let schema: Value =
+            serde_json::from_str(include_str!("../schemas/site-config-v2.schema.json")).unwrap();
+        assert_eq!(schema["properties"]["schema_version"]["const"], 2);
+        fs::remove_dir_all(root).unwrap();
+    }
 }
