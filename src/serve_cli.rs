@@ -176,12 +176,18 @@ pub fn run(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     let port = option(args, "--port")
         .unwrap_or_else(|| "8000".into())
         .parse::<u16>()?;
-    let output_root = render(&site)?;
+    let cancelled = crate::interrupt::install()?;
+    let output_root =
+        render(&site).map_err(|error| format!("[serve] initial render failed\nreason: {error}"))?;
     let listener = TcpListener::bind((host.as_str(), port))?;
     listener.set_nonblocking(true)?;
     println!("[serve] http://{host}:{port}/ -> {}", output_root.display());
     let mut previous = snapshot(&site)?;
     loop {
+        if crate::interrupt::requested(&cancelled) {
+            println!("[serve] stopped by user");
+            return Ok(());
+        }
         loop {
             match listener.accept() {
                 Ok((stream, _)) => {
@@ -192,6 +198,10 @@ pub fn run(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         thread::sleep(Duration::from_millis(250));
+        if crate::interrupt::requested(&cancelled) {
+            println!("[serve] stopped by user");
+            return Ok(());
+        }
         let current = snapshot(&site)?;
         if current != previous {
             match render(&site) {

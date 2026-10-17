@@ -291,6 +291,17 @@ The Cargo package and library crate retain the historical internal name
 `jnja-render` for source compatibility. This does not change the public CLI
 name or the project name.
 
+## Errors and cancellation
+
+Command-line errors are written to stderr with a short context. Pressing
+`Ctrl+C` cancels a build and exits with code `130`; `rinjarender serve` stops
+cleanly. The renderer does not invoke CSS tooling as part of rendering.
+
+The JSON build result is written only after a successful render, so backend
+integrations can continue to use the structured output contract. Use the
+development driver's `--debug` option when a full Python traceback or
+subprocess diagnostic is needed.
+
 | Argument | Purpose | Default |
 |---|---|---|
 | `SITE` | Site root | Current directory |

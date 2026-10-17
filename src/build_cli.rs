@@ -4,7 +4,7 @@ use crate::{
 };
 use serde_json::Value;
 use std::{
-    env,
+    env, io,
     path::{Path, PathBuf},
     time::Instant,
 };
@@ -84,14 +84,17 @@ fn default_state_dir(site_root: &Path) -> Result<PathBuf, String> {
 
 pub(crate) fn build_request(args: &[String]) -> Result<RenderRequest, Box<dyn std::error::Error>> {
     let (site_root, direct_cli) = site_argument(args)?;
-    let site_root = site_root.canonicalize()?;
+    let site_root = site_root
+        .canonicalize()
+        .map_err(|error| format!("site root unavailable: {error}"))?;
     let config_path = optional(args, "--config")
         .map(|path| relative_or_absolute(&site_root, path))
         .unwrap_or_else(|| site_root.join("site_config.json"));
     if !config_path.is_file() {
         return Err(format!("site_config.json not found: {}", config_path.display()).into());
     }
-    let site_config = config::load(&site_root, &config_path)?;
+    let site_config = config::load(&site_root, &config_path)
+        .map_err(|error| format!("could not load {}: {error}", config_path.display()))?;
     let state_dir = optional(args, "--state-dir")
         .map(|path| relative_or_absolute(&site_root, path))
         .map(Ok)
@@ -156,13 +159,26 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
         println!("{name} {}", env!("CARGO_PKG_VERSION"));
         return Ok(());
     }
-    let request = build_request(&args)?;
-    request.validate()?;
+    let request = build_request(&args)
+        .map_err(|error| format!("[config] invalid site configuration\nreason: {error}"))?;
+    request
+        .validate()
+        .map_err(|error| format!("[config] invalid render request\nreason: {error}"))?;
+    let cancelled = crate::interrupt::install()?;
     let started = Instant::now();
-    let mut result = renderer::render(&request)?;
+    let mut result = renderer::render(&request)
+        .map_err(|error| format!("[render] template/content rendering failed\nreason: {error}"))?;
+    if crate::interrupt::requested(&cancelled) {
+        return Err(io::Error::new(io::ErrorKind::Interrupted, "render cancelled").into());
+    }
     result.render_time_ms = started.elapsed().as_millis() as u64;
     if let Some(path) = request.manifest_path() {
-        output::write_json(&path, &result)?;
+        output::write_json(&path, &result).map_err(|error| {
+            format!(
+                "[output] could not write build result\npath: {}\nreason: {error}",
+                path.display()
+            )
+        })?;
     }
     println!("{}", serde_json::to_string_pretty(&result)?);
     Ok(())

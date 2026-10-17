@@ -1,6 +1,10 @@
 use std::time::Instant;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
+    jnja_render::cli_error::exit(run());
+}
+
+fn run() -> Result<(), Box<dyn std::error::Error>> {
     let request = jnja_render::cli::parse_request()?;
     let started = Instant::now();
     let mut result = jnja_render::renderer::render(&request)?;

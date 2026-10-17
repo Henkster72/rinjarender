@@ -1,5 +1,6 @@
 pub mod build_cli;
 pub mod cli;
+pub mod cli_error;
 pub mod compatibility;
 pub mod config;
 pub mod config_migrate_cli;
@@ -9,6 +10,7 @@ pub mod frontmatter;
 pub mod graph;
 pub mod incremental;
 pub mod init_cli;
+pub mod interrupt;
 pub mod manifest;
 pub mod markdown;
 pub mod metadata;
