@@ -1,6 +1,8 @@
+pub mod build_cli;
 pub mod cli;
 pub mod compatibility;
 pub mod config;
+pub mod config_migrate_cli;
 pub mod context;
 pub mod discovery;
 pub mod frontmatter;

@@ -2,14 +2,14 @@
 
 **A native Rust renderer for Jinja templates, Markdown and static sites.**
 
-RinjaRender uses the `jnja-build` CLI to render real Jinja-compatible
+RinjaRender uses the `rinjarender` CLI to render real Jinja-compatible
 templates—not only simple variable substitution—and turns site source into
 deterministic static files:
 
 ```text
 templates + structured content + Markdown
                   ↓
-              jnja-build
+            rinjarender
                   ↓
              static HTML/assets
 ```
@@ -47,7 +47,7 @@ Python/PHP + Jinja environment
         → load data → render templates → write static HTML
 ```
 
-`jnja-build` moves the rendering part into one native executable. Python, PHP,
+`rinjarender` moves the rendering part into one native executable. Python, PHP,
 or another backend can still prepare data and orchestrate the process; they do
 not need to be the production rendering runtime.
 
@@ -83,9 +83,9 @@ RinjaRender is not:
 It generates static output. CSS optimization and deployment are separate
 responsibilities.
 
-The project is named **RinjaRender**. The current executable remains
-`jnja-build` for local and integration compatibility; it is not being renamed
-in this release.
+The project is named **RinjaRender** and the primary executable is
+`rinjarender`. The existing `jnja-build` executable remains available as a
+backward-compatible alias for local and integration workflows.
 
 ## Jinja template support
 
@@ -224,7 +224,7 @@ examples/minimal/
 Render it with:
 
 ```bash
-jnja-build examples/minimal --full
+rinjarender examples/minimal --full
 ```
 
 The result is written to:
@@ -242,13 +242,13 @@ documentation-only mockup. It includes a Markdown page and the small
 Build a site from any compatible checkout:
 
 ```bash
-jnja-build /path/to/site --full
+rinjarender /path/to/site --full
 ```
 
 After the first build, use incremental mode during development:
 
 ```bash
-jnja-build /path/to/site --incremental
+rinjarender /path/to/site --incremental
 ```
 
 When installed from source, the development binary is produced by:
@@ -261,13 +261,18 @@ The resulting executable is under `target/release/`. A musl target can be used
 when a portable static deployment artifact is required; that is a release and
 deployment choice, not a requirement of local rendering.
 
-There are currently no official prebuilt GitHub release downloads. A public
-release should publish a versioned binary together with its checksum and target
-information.
+The GitHub releases provide versioned binaries and SHA256 checksums. The v0.1.0
+artifact retains the historical `jnja-build` filename; newer releases use the
+public `rinjarender` name.
 
 ## CLI reference
 
-The direct executable is `jnja-build`.
+The primary executable is `rinjarender`. `jnja-build` remains a compatibility
+alias with the same implementation and behavior.
+
+The Cargo package and library crate retain the historical internal name
+`jnja-render` for source compatibility. This does not change the public CLI
+name or the project name.
 
 | Argument | Purpose | Default |
 |---|---|---|
@@ -287,6 +292,14 @@ The direct executable is `jnja-build`.
 resolved below the selected site root. The executable also retains explicit
 automation flags such as `--site-root`, `--output-root`, `--state`, `--manifest`
 and `--cache-dir` for backend integrations.
+
+Configuration migration is a separate utility. Its public name is
+`rinjarender-config-migrate`; `jnja-config-migrate` remains available as a
+legacy alias:
+
+```bash
+rinjarender-config-migrate --site-root SITE --output site_config.json
+```
 
 ## Full and incremental builds
 
@@ -325,7 +338,7 @@ validated generated artifacts.
 
 ## CSS and Tailwind
 
-`jnja-build` does not require Tailwind. CSS purge is an optional post-render
+`rinjarender` does not require Tailwind. CSS purge is an optional post-render
 operation:
 
 ```text
@@ -348,7 +361,7 @@ also means that a content/editor update does not need to rebuild the site's CSS.
 
 ## `site-build` orchestration
 
-`jnja-build` is the renderer CLI. `site-build` is a convenience driver around
+`rinjarender` is the renderer CLI. `site-build` is a convenience driver around
 it. Depending on the project, the driver can provide:
 
 - interactive incremental/full mode selection;
@@ -358,7 +371,7 @@ it. Depending on the project, the driver can provide:
 - explicit upload choices.
 
 These are orchestration concerns, not Rust renderer requirements. A generic
-installation may use `jnja-build` directly and provide its own thin driver.
+installation may use `rinjarender` directly and provide its own thin driver.
 
 ## Deployment model
 
@@ -392,9 +405,9 @@ configuration and stale-artifact behavior, and rendering without CSS tooling.
 Focused fixture coverage also verifies variables, conditions, loops, includes,
 inheritance, blocks, macros, imports, filters, and lenient undefined values.
 
-## Traditional Jinja build compared with `jnja-build`
+## Traditional Jinja build compared with `rinjarender`
 
-| | Traditional Python/Jinja build | `jnja-build` |
+| | Traditional Python/Jinja build | `rinjarender` |
 |---|---|---|
 | Templates | Jinja | Verified Jinja-compatible subset |
 | Output | Static HTML | Static HTML |
@@ -406,7 +419,7 @@ inheritance, blocks, macros, imports, filters, and lenient undefined values.
 
 ## When should you use this?
 
-Use `jnja-build` when:
+Use `rinjarender` when:
 
 - the final product is static HTML and assets;
 - you want to retain a Jinja/Markdown-style source workflow;
