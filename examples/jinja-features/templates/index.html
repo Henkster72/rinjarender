@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "macros/ui.html" as ui %}
+
+{% block content %}
+  <h1>{{ site.name | upper }}</h1>
+  {% if featured %}<p>Featured content</p>{% endif %}
+  <ul>
+    {% for item in items %}<li>{{ item.name }}</li>{% endfor %}
+  </ul>
+  {{ ui.button("Read more", "/about/") }}
+  <p>Route: {{ "about.html" | url(0) }}</p>
+  <p>Missing values are empty: {{ missing_value }}</p>
+{% endblock %}

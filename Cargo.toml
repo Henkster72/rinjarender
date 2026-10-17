@@ -1,0 +1,21 @@
+[package]
+name = "jnja-render"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.89"
+publish = false
+description = "RinjaRender: a native Rust renderer for Jinja templates, Markdown and static sites"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Henkster72/rinjarender"
+readme = "README.md"
+keywords = ["jinja", "markdown", "static-site", "renderer", "ssg"]
+categories = ["command-line-utilities", "web-programming"]
+
+[dependencies]
+comrak = { version = "0.56", default-features = false, features = ["attributes"] }
+minijinja = { version = "2", default-features = false, features = ["builtins", "debug", "json", "macros", "multi_template", "serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+yaml_serde = "=0.10.7"
+sha2 = "0.10"
+

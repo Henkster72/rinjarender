@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "site": {
+    "name": "Jinja Feature Demo"
+  },
+  "featured": true,
+  "items": [
+    {"name": "Includes"},
+    {"name": "Macros"}
+  ]
+}

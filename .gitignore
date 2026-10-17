@@ -1,0 +1,25 @@
+# Rust build output and local profiling artifacts.
+target/
+*.profraw
+
+# Local runtime/build state and temporary outputs.
+cache/
+build-output/
+output/
+*.json.tmp
+.cache/
+.env
+.env.*
+node_modules/
+
+# Local compiled artifacts; release binaries belong in deployment storage.
+*.musl
+jnja-build
+jnja-render
+/dist/
+release/
+
+# Editor and Python helper noise.
+__pycache__/
+*.pyc
+.DS_Store
