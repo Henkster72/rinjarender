@@ -1,15 +1,15 @@
-# RinjaRender
+# OpenSite Render
 
 **A native Rust renderer for Jinja templates, Markdown and static sites.**
 
-RinjaRender uses the `rinjarender` CLI to render real Jinja-compatible
+OpenSite Render uses the `opensite-render` CLI to render real Jinja-compatible
 templates—not only simple variable substitution—and turns site source into
 deterministic static files:
 
 ```text
 templates + structured content + Markdown
                   ↓
-            rinjarender
+         opensite-render
                   ↓
              static HTML/assets
 ```
@@ -19,7 +19,7 @@ npm, a database, or a CMS runtime during rendering.
 
 ## Who is this for?
 
-RinjaRender is intended for projects that already use, or want to use:
+OpenSite Render is intended for projects that already use, or want to use:
 
 - Jinja templates;
 - Markdown or structured content files;
@@ -47,7 +47,7 @@ Python/PHP + Jinja environment
         → load data → render templates → write static HTML
 ```
 
-`rinjarender` moves the rendering part into one native executable. Python, PHP,
+`opensite-render` moves the rendering part into one native executable. Python, PHP,
 or another backend can still prepare data and orchestrate the process; they do
 not need to be the production rendering runtime.
 
@@ -71,7 +71,7 @@ renderer while the Rust core becomes the single HTML renderer.
 
 ## What it is not
 
-RinjaRender is not:
+OpenSite Render is not:
 
 - a web server or CMS;
 - a database or live page runtime;
@@ -83,13 +83,14 @@ RinjaRender is not:
 It generates static output. CSS optimization and deployment are separate
 responsibilities.
 
-The project is named **RinjaRender** and the primary executable is
-`rinjarender`. The existing `jnja-build` executable remains available as a
-backward-compatible alias for local and integration workflows.
+The project is named **OpenSite Render** and the primary executable is
+`opensite-render`. The existing `rinjarender` and `jnja-build` executables
+remain available as backward-compatible aliases for local and integration
+workflows.
 
 ## Jinja template support
 
-RinjaRender is intended for real Jinja template projects, not just
+OpenSite Render is intended for real Jinja template projects, not just
 `{{ variable }}` substitution. Templates use MiniJinja plus the renderer's
 compatibility layer.
 
@@ -224,7 +225,7 @@ examples/minimal/
 Render it with:
 
 ```bash
-rinjarender examples/minimal --full
+opensite-render examples/minimal --full
 ```
 
 The result is written to:
@@ -242,9 +243,9 @@ documentation-only mockup. It includes a Markdown page and the small
 Create a small site and preview it locally:
 
 ```bash
-rinjarender init my-site
+opensite-render init my-site
 cd my-site
-rinjarender serve
+opensite-render serve
 ```
 
 `serve` performs an initial incremental render, serves the generated `output/`
@@ -259,13 +260,13 @@ autocomplete. The formal schema is kept at
 Build a site from any compatible checkout:
 
 ```bash
-rinjarender /path/to/site --full
+opensite-render /path/to/site --full
 ```
 
 After the first build, use incremental mode during development:
 
 ```bash
-rinjarender /path/to/site --incremental
+opensite-render /path/to/site --incremental
 ```
 
 When installed from source, the development binary is produced by:
@@ -280,12 +281,12 @@ deployment choice, not a requirement of local rendering.
 
 The GitHub releases provide versioned binaries and SHA256 checksums. The v0.1.0
 artifact retains the historical `jnja-build` filename; newer releases use the
-public `rinjarender` name.
+public `opensite-render` name.
 
 ## CLI reference
 
-The primary executable is `rinjarender`. `jnja-build` remains a compatibility
-alias with the same implementation and behavior.
+The primary executable is `opensite-render`. `rinjarender` and `jnja-build`
+remain compatibility aliases with the same implementation and behavior.
 
 The Cargo package and library crate retain the historical internal name
 `jnja-render` for source compatibility. This does not change the public CLI
@@ -294,7 +295,7 @@ name or the project name.
 ## Errors and cancellation
 
 Command-line errors are written to stderr with a short context. Pressing
-`Ctrl+C` cancels a build and exits with code `130`; `rinjarender serve` stops
+`Ctrl+C` cancels a build and exits with code `130`; `opensite-render serve` stops
 cleanly. The renderer does not invoke CSS tooling as part of rendering.
 
 The JSON build result is written only after a successful render, so backend
@@ -322,11 +323,11 @@ automation flags such as `--site-root`, `--output-root`, `--state`, `--manifest`
 and `--cache-dir` for backend integrations.
 
 Configuration migration is a separate utility. Its public name is
-`rinjarender-config-migrate`; `jnja-config-migrate` remains available as a
+`opensite-render-config-migrate`; `jnja-config-migrate` remains available as a
 legacy alias:
 
 ```bash
-rinjarender-config-migrate --site-root SITE --output site_config.json
+opensite-render-config-migrate --site-root SITE --output site_config.json
 ```
 
 ## Full and incremental builds
@@ -366,7 +367,7 @@ validated generated artifacts.
 
 ## CSS and Tailwind
 
-`rinjarender` does not require Tailwind. CSS purge is an optional post-render
+`opensite-render` does not require Tailwind. CSS purge is an optional post-render
 operation:
 
 ```text
@@ -389,7 +390,7 @@ also means that a content/editor update does not need to rebuild the site's CSS.
 
 ## `site-build` orchestration
 
-`rinjarender` is the renderer CLI. `site-build` is a convenience driver around
+`opensite-render` is the renderer CLI. `site-build` is a convenience driver around
 it. Depending on the project, the driver can provide:
 
 - interactive incremental/full mode selection;
@@ -399,7 +400,7 @@ it. Depending on the project, the driver can provide:
 - explicit upload choices.
 
 These are orchestration concerns, not Rust renderer requirements. A generic
-installation may use `rinjarender` directly and provide its own thin driver.
+installation may use `opensite-render` directly and provide its own thin driver.
 
 ## Deployment model
 
@@ -433,9 +434,9 @@ configuration and stale-artifact behavior, and rendering without CSS tooling.
 Focused fixture coverage also verifies variables, conditions, loops, includes,
 inheritance, blocks, macros, imports, filters, and lenient undefined values.
 
-## Traditional Jinja build compared with `rinjarender`
+## Traditional Jinja build compared with `opensite-render`
 
-| | Traditional Python/Jinja build | `rinjarender` |
+| | Traditional Python/Jinja build | `opensite-render` |
 |---|---|---|
 | Templates | Jinja | Verified Jinja-compatible subset |
 | Output | Static HTML | Static HTML |
@@ -447,7 +448,7 @@ inheritance, blocks, macros, imports, filters, and lenient undefined values.
 
 ## When should you use this?
 
-Use `rinjarender` when:
+Use `opensite-render` when:
 
 - the final product is static HTML and assets;
 - you want to retain a Jinja/Markdown-style source workflow;

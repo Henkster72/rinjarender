@@ -138,7 +138,7 @@ fn program_name(args: &[String]) -> &str {
         .and_then(|arg| Path::new(arg).file_name())
         .and_then(|name| name.to_str())
         .filter(|name| !name.is_empty())
-        .unwrap_or("rinjarender")
+        .unwrap_or("opensite-render")
 }
 
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {

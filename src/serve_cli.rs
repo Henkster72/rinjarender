@@ -90,7 +90,7 @@ fn snapshot(root: &Path) -> Result<BTreeMap<PathBuf, (u64, u128)>, Box<dyn std::
 
 fn render(site: &Path) -> Result<PathBuf, Box<dyn std::error::Error>> {
     let args = vec![
-        "rinjarender".into(),
+        "opensite-render".into(),
         site.to_string_lossy().into_owned(),
         "--incremental".into(),
     ];
@@ -168,7 +168,7 @@ fn respond(mut stream: TcpStream, output_root: &Path) -> std::io::Result<()> {
 
 pub fn run(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     if args.iter().any(|arg| arg == "--help" || arg == "-h") {
-        println!("rinjarender serve [SITE] [--host HOST] [--port PORT]");
+        println!("opensite-render serve [SITE] [--host HOST] [--port PORT]");
         return Ok(());
     }
     let site = site_arg(args).canonicalize()?;

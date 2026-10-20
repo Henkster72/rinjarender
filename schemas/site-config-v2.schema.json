@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/Henkster72/rinjarender/main/schemas/site-config-v2.schema.json",
-  "title": "RinjaRender site_config.json v2",
-  "description": "Portable, non-secret site configuration accepted by RinjaRender.",
+  "$id": "https://raw.githubusercontent.com/Henkster72/opensite-render/main/schemas/site-config-v2.schema.json",
+  "title": "OpenSite Render site_config.json v2",
+  "description": "Portable, non-secret site configuration accepted by OpenSite Render.",
   "type": "object",
   "required": ["schema_version"],
   "properties": {

@@ -8,7 +8,7 @@ pub fn exit(result: Result<(), Box<dyn std::error::Error>>) -> ! {
                 .downcast_ref::<io::Error>()
                 .is_some_and(|value| value.kind() == io::ErrorKind::Interrupted) =>
         {
-            eprintln!("[rinjarender] cancelled by user");
+            eprintln!("[opensite-render] cancelled by user");
             process::exit(130);
         }
         Err(error) => {

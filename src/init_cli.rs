@@ -4,7 +4,7 @@ use std::{
 };
 
 const CONFIG: &str = r#"{
-  "$schema": "https://raw.githubusercontent.com/Henkster72/rinjarender/main/schemas/site-config-v2.schema.json",
+  "$schema": "https://raw.githubusercontent.com/Henkster72/opensite-render/main/schemas/site-config-v2.schema.json",
   "schema_version": 2,
   "paths": {
     "templates": "templates",
@@ -12,7 +12,7 @@ const CONFIG: &str = r#"{
     "output": "output"
   },
   "site": {
-    "name": "RinjaRender site",
+    "name": "OpenSite Render site",
     "language": "en"
   }
 }
@@ -25,7 +25,7 @@ fn write(path: &Path, contents: &str) -> Result<(), Box<dyn std::error::Error>> 
 
 pub fn run(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     if args.iter().any(|arg| arg == "--help" || arg == "-h") {
-        println!("rinjarender init DIRECTORY");
+        println!("opensite-render init DIRECTORY");
         return Ok(());
     }
     let target = args
@@ -45,7 +45,7 @@ pub fn run(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     write(&target.join("site_config.json"), CONFIG)?;
     write(
         &target.join("templates/base.html"),
-        "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>{% block title %}RinjaRender site{% endblock %}</title>\n</head>\n<body>\n  <main>{% block content %}{% endblock %}</main>\n</body>\n</html>\n",
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>{% block title %}OpenSite Render site{% endblock %}</title>\n</head>\n<body>\n  <main>{% block content %}{% endblock %}</main>\n</body>\n</html>\n",
     )?;
     write(
         &target.join("templates/index.html"),
